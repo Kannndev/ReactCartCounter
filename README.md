@@ -1,3 +1,9 @@
+To Run this Project
+
+1. 'npm i' to install all dependencies
+2. 'npm start' to run in the development mode in localhost:3000
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
