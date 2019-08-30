@@ -10,42 +10,49 @@ import {
   Prompt
 } from "react-router-dom";
 
+import { connect } from "react-redux";
+
 class App extends Component {
-  state = {
-    counters: [
-      { id: 1, value: 10, selectedName: "Virat" },
-      { id: 2, value: 20, selectedName: "Kohli" },
-      { id: 3, value: 30, selectedName: "Kannan" }
-    ],
-    loggedIn: false
-  };
+  // local state and props now moved to redux store
+  // state = {
+  //   counters: [
+  //     { id: 1, value: 10, selectedName: "Virat" },
+  //     { id: 2, value: 20, selectedName: "Kohli" },
+  //     { id: 3, value: 30, selectedName: "Kannan" }
+  //   ],
+  //   loggedIn: false
+  // };
 
-  handleDelete = counterId => {
-    const counters = this.state.counters.filter(elem => elem.id !== counterId);
-    this.setState({ counters });
-  };
+  // handleDelete = counterId => {
+  //   const counters = this.state.counters.filter(elem => elem.id !== counterId);
+  //   this.setState({ counters });
+  // };
 
-  handleReset = () => {
-    const counters = this.state.counters.map(counter => {
-      counter.value = 0;
-      return counter;
-    });
-    this.setState({ counters });
-  };
+  // handleReset = () => {
+  //   const counters = this.state.counters.map(counter => {
+  //     counter.value = 0;
+  //     return counter;
+  //   });
+  //   this.setState({ counters });
+  // };
 
-  handleIncrement = counter => {
-    const counters = [...this.state.counters];
-    const index = counters.indexOf(counter);
-    counters[index] = { ...counter };
-    counters[index].value++;
-    this.setState({ counters });
-  };
+  // handleIncrement = counter => {
+  //   const counters = [...this.state.counters];
+  //   const index = counters.indexOf(counter);
+  //   counters[index] = { ...counter };
+  //   counters[index].value++;
+  //   this.setState({ counters });
+  // };
 
-  handleLogIn = () => {
-    this.setState(prevState => ({
-      loggedIn: !prevState.loggedIn
-    }));
-  };
+  // handleLogIn = () => {
+  //   this.setState(prevState => ({
+  //     loggedIn: !prevState.loggedIn
+  //   }));
+  // };
+
+  constructor(props) {
+    super(props);
+  }
 
   render() {
     return (
@@ -63,12 +70,12 @@ class App extends Component {
           <NavLink to="/nav/20" exact activeStyle={{ color: "green" }}>
             Count 20
           </NavLink>
-          <button onClick={() => this.handleLogIn()}>
-            {this.state.loggedIn ? "log Out" : "Log In"}
+          <button onClick={() => this.props.handleLogIn()}>
+            {this.props.loggedIn ? "log Out" : "Log In"}
           </button>
 
           <Prompt
-            when={!this.state.loggedIn}
+            when={!this.props.loggedIn}
             message={location => {
               return location.pathname.startsWith("/nav")
                 ? "Are you sure"
@@ -93,15 +100,15 @@ class App extends Component {
                 <React.Fragment>
                   <NavBar
                     totalCount={
-                      this.state.counters.filter(c => c.value > 0).length
+                      this.props.counters.filter(c => c.value > 0).length
                     }
                   />
                   <main className="container">
                     <Counters
-                      onDelete={this.handleDelete}
-                      onReset={this.handleReset}
-                      onIncrement={this.handleIncrement}
-                      counters={this.state.counters}
+                      onDelete={this.props.handleDelete}
+                      onReset={this.props.handleReset}
+                      onIncrement={this.props.handleIncrement}
+                      counters={this.props.counters}
                     />
                   </main>
                 </React.Fragment>
@@ -115,7 +122,7 @@ class App extends Component {
             strict
             render={({ match }) => {
               // destructuring match property
-              return this.state.loggedIn ? (
+              return this.props.loggedIn ? (
                 <NavBar totalCount={match.params.count} />
               ) : (
                 <Redirect to="/" />
@@ -128,4 +135,33 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    counters: state.counters,
+    loggedIn: state.loggedIn
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  //user given names method, params,
+  // each property should be called with dispatch args refers to dispatch function in redux
+  return {
+    handleIncrement: counter =>
+      dispatch({ type: "VALUE_UP", payload: counter }),
+    handleLogIn: () =>
+      dispatch({
+        type: "LOGIN_TOGGLE"
+      }),
+    handleDelete: counterId =>
+      dispatch({
+        type: "DELETE",
+        payload: counterId
+      }),
+    handleReset: () => dispatch({ type: "RESET" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
