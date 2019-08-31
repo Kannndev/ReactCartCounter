@@ -6,10 +6,30 @@ import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.css";
 
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import reducer from "./store/reducer";
+import { createStore, applyMiddleware } from "redux";
+import reducer from "./store/reducers/reducer";
+import thunk from "redux-thunk";
 
-const store = createStore(reducer);
+/** 
+ * The below method is a example of custom middle ware.
+const logAction = store => {
+  return next => {
+    // next is dispatch method in redux here
+    return action => {
+      // in action we get action we pass in dispatch method
+      // we can perform the operations we need here and call next action so that it passes to the reducer.
+      return next(action);
+    };
+  };
+};
+
+const store = createStore(reducer, applyMiddleware(logAction));
+*/
+
+// Redux thunk middle ware
+// async actions in dispatch events are only possible with custom middleware like thunk and saga
+// If we dont use thunk an error will be thrown if there is an async code in our action.
+const store = createStore(reducer, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>

@@ -11,44 +11,47 @@ import {
 } from "react-router-dom";
 
 import { connect } from "react-redux";
+import * as actionCreator from "./store/actions/actions";
 
 class App extends Component {
-  // local state and props now moved to redux store
-  // state = {
-  //   counters: [
-  //     { id: 1, value: 10, selectedName: "Virat" },
-  //     { id: 2, value: 20, selectedName: "Kohli" },
-  //     { id: 3, value: 30, selectedName: "Kannan" }
-  //   ],
-  //   loggedIn: false
-  // };
+  /**
+  local state and props now moved to redux store
+  state = {
+    counters: [
+      { id: 1, value: 10, selectedName: "Virat" },
+      { id: 2, value: 20, selectedName: "Kohli" },
+      { id: 3, value: 30, selectedName: "Kannan" }
+    ],
+    loggedIn: false
+  };
 
-  // handleDelete = counterId => {
-  //   const counters = this.state.counters.filter(elem => elem.id !== counterId);
-  //   this.setState({ counters });
-  // };
+  handleDelete = counterId => {
+    const counters = this.state.counters.filter(elem => elem.id !== counterId);
+    this.setState({ counters });
+  };
 
-  // handleReset = () => {
-  //   const counters = this.state.counters.map(counter => {
-  //     counter.value = 0;
-  //     return counter;
-  //   });
-  //   this.setState({ counters });
-  // };
+  handleReset = () => {
+    const counters = this.state.counters.map(counter => {
+      counter.value = 0;
+      return counter;
+    });
+    this.setState({ counters });
+  };
 
-  // handleIncrement = counter => {
-  //   const counters = [...this.state.counters];
-  //   const index = counters.indexOf(counter);
-  //   counters[index] = { ...counter };
-  //   counters[index].value++;
-  //   this.setState({ counters });
-  // };
+  handleIncrement = counter => {
+    const counters = [...this.state.counters];
+    const index = counters.indexOf(counter);
+    counters[index] = { ...counter };
+    counters[index].value++;
+    this.setState({ counters });
+  };
 
-  // handleLogIn = () => {
-  //   this.setState(prevState => ({
-  //     loggedIn: !prevState.loggedIn
-  //   }));
-  // };
+  handleLogIn = () => {
+    this.setState(prevState => ({
+      loggedIn: !prevState.loggedIn
+    }));
+  };
+   */
 
   constructor(props) {
     super(props);
@@ -146,18 +149,10 @@ const mapDispatchToProps = dispatch => {
   //user given names method, params,
   // each property should be called with dispatch args refers to dispatch function in redux
   return {
-    handleIncrement: counter =>
-      dispatch({ type: "VALUE_UP", payload: counter }),
-    handleLogIn: () =>
-      dispatch({
-        type: "LOGIN_TOGGLE"
-      }),
-    handleDelete: counterId =>
-      dispatch({
-        type: "DELETE",
-        payload: counterId
-      }),
-    handleReset: () => dispatch({ type: "RESET" })
+    handleIncrement: counter => dispatch(actionCreator.valueUp(counter)),
+    handleLogIn: () => dispatch(actionCreator.loginToggle()),
+    handleDelete: counterId => dispatch(actionCreator.deleteCounter(counterId)),
+    handleReset: () => dispatch(actionCreator.reset())
   };
 };
 
