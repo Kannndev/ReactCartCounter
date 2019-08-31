@@ -147,7 +147,7 @@ const mapDispatchToProps = dispatch => {
   // each property should be called with dispatch args refers to dispatch function in redux
   return {
     handleIncrement: counter =>
-      dispatch({ type: "VALUE_UP", payload: counter }),
+      dispatch({ type: "VALUE_UP_SAGA", payload: counter }),
     handleLogIn: () =>
       dispatch({
         type: "LOGIN_TOGGLE"
@@ -157,7 +157,7 @@ const mapDispatchToProps = dispatch => {
         type: "DELETE",
         payload: counterId
       }),
-    handleReset: () => dispatch({ type: "RESET" })
+    handleReset: () => dispatch({ type: "RESET_SAGA" })
   };
 };
 
